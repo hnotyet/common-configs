@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="pack" default="war" basedir=".">
+	<!--  可在外部属性文件中定义变量
+	<property file="add.properties" />  -->
+
+	<property name="warname" value="gysfwdt.war" />
+	<!--源代码路径 -->
+	<property name="srcDir" value="src" />
+	<!-- 编译成的class文件存放路径 -->
+	<property name="classDir" value="WebRoot/WEB-INF/classes" />
+	<!-- 整个目录要拷贝到的目的路径 -->
+	<property name="destDir" value="E:/package/" />
+	<!-- 整个目录要拷贝到的目的路径 -->
+	<property name="projectName" value="gysfwdt" />
+	<!--第三方jar包存放目录-->
+	<property name="libDir" value="WebRoot/WEB-INF/lib/" />
+	<!-- 待拷贝的目录 -->
+	<property name="copyDir" value="WebRoot" />
+
+	<path id="classpath">
+		<fileset dir="${libDir}">
+			<!-- 编译java程序用到的第三方包所在的目录 -->
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<target name="compile" description="编译">
+		<mkdir dir="${classDir}" />
+		<javac destdir="${classDir}" srcdir="${srcDir}" classpathref="classpath" />
+	</target>
+
+
+
+	<target name="copy" depends="compile" description="拷贝文件">
+		<copy todir="${destDir}/${projectName}">
+			<fileset dir="${copyDir}">
+				<!--	<exclude name="WebRoot/flex/**,**"/>  排除 WebRoot/flex/下所有文件	-->
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="war" depends="copy" description="打包">
+		<war destfile="${destDir}/${warname}">
+			<fileset dir="${copyDir}">
+			</fileset>
+		</war>
+	</target>
+
+</project>
